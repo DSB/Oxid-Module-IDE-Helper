@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OX>
+    <OXMENU id="NAVIGATION_ESHOPADMIN">
+        <MAINMENU id="mxextensions">
+            <SUBMENU id="dsb_ide_helper" cl="dsb_ide_helper"/>
+        </MAINMENU>
+    </OXMENU>
+</OX>
