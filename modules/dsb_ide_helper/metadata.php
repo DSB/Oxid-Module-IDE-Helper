@@ -10,7 +10,7 @@ $sMetadataVersion = '1.1';
 $aModule = array(
     'id'          => 'dsb_ide_helper',
     'title'       => 'DSB\'s IDE Helper',
-    'url'         => '',
+    'url'         => 'https://github.com/DSB/Oxid-Module-IDE-Helper',
     'description' => array(
         'en' => 'In OXID IDE\'s can\'t follow the class inheritance chain because the referred parent classes are '
                 . ' created in memory at runtime.<br>'
