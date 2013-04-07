@@ -21,6 +21,11 @@
         </div>
     </form>
     <div class="clear"><br></div>
+
+    [{if ($blActionPerformed)}]
+        <h2>[{oxmultilang ident="DSB_IDEHELPER_ACTIONS_PERFORMED"}]</h2>
+    [{/if}]
+
     [{if count($deleteErrors) > 0}]
         <div class="errorbox">
             <h3>[{oxmultilang ident="DSB_IDEHELPER_DELETE_FILES_ERROR"}]</h3>
@@ -69,6 +74,7 @@
         <br>
     [{/if}]
 
+    <h2>[{oxmultilang ident="DSB_IDEHELPER_CURRENT_STATUS"}]</h2>
     [{if count($existsErrors) > 0}]
         <div class="errorbox">
             <h3>[{oxmultilang ident="DSB_IDEHELPER_MISSING_FILES"}]</h3>

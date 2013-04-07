@@ -23,145 +23,139 @@ class dsb_ide_helper extends oxAdminView
         $create  = $oConfig->getRequestParameter('create') == null ? false : true;
 
         if ($delete) {
-            $this->deleteParentClassFiles();
+            $this->iterateParentClassFiles('delete');
         } elseif ($create) {
-            $this->deleteParentClassFiles();
-            $this->createParentClassFiles();
+            $this->iterateParentClassFiles('delete', false, true);
+            $this->iterateParentClassFiles('create');
         }
 
-        $this->checkParentClassFiles();
+        $this->iterateParentClassFiles('exists', true, true);
 
         return $this->_tpl;
     }
 
     /**
-     * Check if parent class files do exist
+     * Iterate classes, execute action and set result to view
+     *
+     * @param string $action                  Action to perform
+     * @param bool   $blSkipDisabledModules   Whether to exclude disabled modules or not
+     * @param bool   $blForceReloading        Whether to force reloading of file list
      *
      * @return void
      */
-    protected function checkParentClassFiles()
+    protected function iterateParentClassFiles($action, $blSkipDisabledModules = true, $blForceReloading = false)
     {
-        $aClasses = $this->getModuleClassesArray();
+        $aClasses = $this->getModuleClassesArray($blSkipDisabledModules, $blForceReloading);
         $aErrors  = $aSuccess = array();
         foreach ($aClasses as $aClass) {
-            if (file_exists($aClass['fileName'])) {
-                $aSuccess[] = $aClass['fileName'];
-            } else {
-                $aErrors[] = $aClass['fileName'];
+            switch ($action) {
+                case 'exists':
+                    if (file_exists($aClass['fileName'])) {
+                        $aSuccess[] = $aClass['fileName'];
+                    } else {
+                        $aErrors[] = $aClass['fileName'];
+                    }
+                    break;
+                case 'create':
+                    if (file_put_contents($aClass['fileName'], $aClass['content'])) {
+                        $aSuccess[] = $aClass['fileName'];
+                    } else {
+                        $aErrors[] = $aClass['fileName'];
+                    }
+                    break;
+                case 'delete':
+                    if (file_exists($aClass['fileName'])) {
+                        if (@unlink($aClass['fileName'])) {
+                            $aSuccess[] = $aClass['fileName'];
+                        } else {
+                            $aErrors[] = $aClass['fileName'];
+                        }
+                    }
+                    break;
             }
         }
-        $this->_aViewData['existsSuccess'] = $aSuccess;
-        $this->_aViewData['existsErrors']  = $aErrors;
-    }
-
-    /**
-     * Delete parent class files
-     *
-     * @return void
-     */
-    protected function deleteParentClassFiles()
-    {
-        $aClasses = $this->getModuleClassesArray(false);
-        $aErrors  = $aSuccess = array();
-        foreach ($aClasses as $aClass) {
-            if (file_exists($aClass['fileName'])) {
-                if (@unlink($aClass['fileName'])) {
-                    $aSuccess[] = $aClass['fileName'];
-                } else {
-                    $aErrors[] = $aClass['fileName'];
-                }
-            }
-        }
-        $this->_aViewData['deleteSuccess'] = $aSuccess;
-        $this->_aViewData['deleteErrors']  = $aErrors;
-    }
-
-    /**
-     * Create parent class files
-     *
-     * @return void
-     */
-    protected function createParentClassFiles()
-    {
-        $aClasses = $this->getModuleClassesArray();
-        $aErrors  = $aSuccess = array();
-        foreach ($aClasses as $aClass) {
-            $blResult = file_put_contents($aClass['fileName'], $aClass['content']);
-            if ($blResult !== false) {
-                $aSuccess[] = $aClass['fileName'];
-            } else {
-                $aErrors[] = $aClass['fileName'];
-            }
-        }
-        $this->_aViewData['createSuccess'] = $aSuccess;
-        $this->_aViewData['createErrors']  = $aErrors;
+        $this->assignViewVars($action, $aSuccess, $aErrors);
     }
 
     /**
      * Build array containing the filename with absolute path and the content for each parent class
      *
-     * @param bool $blRemoveDisabledModules Whether to exclude disabled modules or not
+     * @param bool $blSkipDisabledModules Whether to exclude disabled modules or not
+     * @param bool $blForceReloading      Whether to force reloading of list
      *
      * @return array
      */
-    protected function getModuleClassesArray($blRemoveDisabledModules = true)
+    protected function getModuleClassesArray($blSkipDisabledModules = true, $blForceReloading = false)
     {
-        if (null != $this->_aModuleClasses) {
+        if (null != $this->_aModuleClasses && !$blForceReloading) {
             return $this->_aModuleClasses;
         }
 
+        clearstatcache();
         /**
          * @var oxModule $oModule
          */
-        $oModule          = oxNew('oxmodule');
-        $aModules         = $oModule->getAllModules();
-        $aDisabledModules = $oModule->getDisabledModules();
-        $modulePath       = $this->getViewConfig()->getModulePath('dsb_ide_helper');
-        $moduleBasePath   = str_replace('dsb_ide_helper/', '', $modulePath);
-        $aClasses         = array();
+        $oModule               = oxNew('oxmodule');
+        $aModules              = $oModule->getAllModules();
+        $aDisabledModules      = $oModule->getDisabledModules();
+        $moduleBasePath        = $this->getConfig()->getModulesDir(true);
+        $this->_aModuleClasses = array();
         foreach ($aModules as $sClassName => $aModuleClasses) {
             $sParentClassName = $sClassName;
             foreach ($aModuleClasses as $sModuleClass) {
-                if ($blRemoveDisabledModules && in_array($sModuleClass, $aDisabledModules)) {
+                if ($blSkipDisabledModules && in_array($sModuleClass, $aDisabledModules)) {
                     continue;
                 }
 
-                $aDirectories     = explode('/', $sModuleClass);
+                $aDirectories     = explode(DIRECTORY_SEPARATOR, $sModuleClass);
                 $sModuleClassName = $aDirectories[count($aDirectories) - 1] . '_parent';
                 unset($aDirectories[count($aDirectories) - 1]);
-
-                $aClasses[] = array(
-                    'fileName' => $moduleBasePath . implode('/', $aDirectories) . '/' . $sModuleClassName . '.php',
+                $sFilePath               = $moduleBasePath . implode(DIRECTORY_SEPARATOR, $aDirectories) . DIRECTORY_SEPARATOR;
+                $this->_aModuleClasses[] = array(
+                    'fileName' => $sFilePath . $sModuleClassName . '.php',
                     'content'  => $this->getFileContent($sModuleClassName, $sParentClassName),
                 );
 
                 $sParentClassName = $sModuleClassName;
             }
         }
-        $this->_aModuleClasses = $aClasses;
 
-        return $aClasses;
+        return $this->_aModuleClasses;
     }
 
     /**
      * Get parent class file content
      *
-     * @param string $className       Name of class
-     * @param string $parentClassName Name of parent class
+     * @param string $sClassName       Name of class
+     * @param string $sParentClassName Name of parent class
      *
      * @return string
      */
-    protected function getFileContent($className, $parentClassName)
+    protected function getFileContent($sClassName, $sParentClassName)
     {
-        $tpl = "<?php\n"
-               . "/**\n"
-               . " * Auto generated parent class file for auto completion in IDE's\n"
-               . " * Generated by module dsb_ide_helper\n"
-               . " */\n"
-               . "class %s extends %s {}\n";
+        $sTpl = "<?php\n"
+                . "/**\n"
+                . " * Auto generated parent class file for auto completion in IDE's\n"
+                . " * Generated by module dsb_ide_helper\n"
+                . " */\n"
+                . "class %s extends %s {}\n";
 
-        $ret = sprintf($tpl, $className, $parentClassName);
+        return sprintf($sTpl, $sClassName, $sParentClassName);
+    }
 
-        return $ret;
+    /**
+     * Assign result arrays to view
+     *
+     * @param string $sType    Action type
+     * @param array  $aSuccess Array containing files that have been processed successfully
+     * @param array  $aErrors  Array containing files that have not been processed successfully
+     */
+    protected function assignViewVars($sType, $aSuccess, $aErrors)
+    {
+        $this->addTplParam($sType . 'Success', $aSuccess);
+        $this->addTplParam($sType . 'Errors', $aErrors);
+        if ($sType !== 'exists') {
+            $this->addTplParam('blActionPerformed', true);
+        }
     }
 }

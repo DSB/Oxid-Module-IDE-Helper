@@ -13,4 +13,6 @@ $aLang = array(
     'DSB_IDEHELPER_CREATE_FILES_ERROR'   => 'Die folgenden Dateien konnten nicht angelegt werden:',
     'DSB_IDEHELPER_EXISTING_FILES'       => 'Diese Elternklassen existieren:',
     'DSB_IDEHELPER_MISSING_FILES'        => 'Diese Elternklassen fehlen:',
+    'DSB_IDEHELPER_ACTIONS_PERFORMED'    => 'Ausgef&uuml;hrte Aktionen',
+    'DSB_IDEHELPER_CURRENT_STATUS'       => 'Aktueller Status',
 );

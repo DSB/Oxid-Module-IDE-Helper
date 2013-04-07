@@ -12,12 +12,12 @@ $aModule = array(
     'title'       => 'DSB\'s IDE Helper',
     'url'         => 'https://github.com/DSB/Oxid-Module-IDE-Helper',
     'description' => array(
-        'en' => 'In OXID IDE\'s can\'t follow the class inheritance chain because the referred parent classes are '
+        'en' => 'IDE\'s can\'t follow the module\'s class inheritance chain in OXID code because the referred parent classes are '
                 . ' created in memory at runtime.<br>'
                 . 'This makes it impossible for IDE\'s to create auto completion for the parent '
-                . 'classes. This module can save them as physical files to disc which enables the IDE to follow the '
+                . 'classes. This module can save them as physical files to disk which enables the IDE to follow the '
                 . 'class chain. The benfit is to now have auto completion in your IDE.'
-                . '<br />After changing the module chain you should update the files here.',
+                . '<br />After changing the module chain you should update the parent files using this module.',
         'de' => 'Eine IDE kann im OXID-Code der Vererbungskette von Modulklassen nicht folgen, da die referenzierten '
                 . 'Elternklassen erst dynamisch zur Laufzeit erstellt werden. Dadurch kann die IDE keine automatische '
                 . 'Vervollst&auml;ndigung von vererbten Methoden der Elternklassen anbieten. '

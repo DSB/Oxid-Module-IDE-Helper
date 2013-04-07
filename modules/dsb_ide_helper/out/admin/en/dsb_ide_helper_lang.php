@@ -13,4 +13,6 @@ $aLang = array(
     'DSB_IDEHELPER_CREATE_FILES_ERROR'   => 'Couldn\'t create the following files:',
     'DSB_IDEHELPER_EXISTING_FILES'       => 'These parent files exist:',
     'DSB_IDEHELPER_MISSING_FILES'        => 'These parent files do not exist:',
+    'DSB_IDEHELPER_ACTIONS_PERFORMED'    => 'Performed actions',
+    'DSB_IDEHELPER_CURRENT_STATUS'       => 'Current status',
 );
