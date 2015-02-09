@@ -13,7 +13,7 @@ Requirements
 You could see benefits in this module when you:
  * are a PHP developer who invents modules for OXID 
  * suffer from not having automatic code completion in your IDE
- * have installed a working OXID eShop installation version 4.7.3 or higher
+ * have installed a working OXID eShop installation version 4.9.x/5.2.x or higher
  
 Installation
 ------------
