@@ -25,7 +25,7 @@ Installation
 
 Compatibility
 -------------
-This module was created and tested with OXID eShop CE 4.7.3. Based on the functionality it provides, chances are high that it will also work smoothly in PE or EE - but it is not guaranteed. 
+This module was created and tested with OXID eShop CE 4.9. Based on the functionality it provides, chances are high that it will also work smoothly in PE or EE - but it is not guaranteed. 
 If you test it I'd love to get your feedback.
 
 Example
