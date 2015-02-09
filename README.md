@@ -31,4 +31,4 @@ If you test it I'd love to get your feedback.
 Example
 ------- 
 This screenshot illustrates the effect before/after creating the parent classes.
-![Before / After](modules/dsb_ide_helper/thumb.png)
+![Before / After](modules/dsb_ide_helper/out/thumb.png)
