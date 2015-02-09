@@ -95,13 +95,14 @@ class dsb_ide_helper extends oxAdminView
         /**
          * @var oxModule $oModule
          */
-        $oModule               = oxNew('oxmodule');
-        $aModules              = $oModule->getAllModules();
-        $aDisabledModules      = $oModule->getDisabledModules();
+        $oModuleList           = oxNew('oxmodulelist');
+        $aModules              = $oModuleList->getModules();
+        $aDisabledModules      = $oModuleList->getDisabledModules();
         $moduleBasePath        = $this->getConfig()->getModulesDir(true);
         $this->_aModuleClasses = array();
-        foreach ($aModules as $sClassName => $aModuleClasses) {
-            $sParentClassName = $sClassName;
+        foreach ($aModules as $sClassName => $sModuleClasses) {
+        	$aModuleClasses = explode('&', $sModuleClasses);
+        	$sParentClassName = $sClassName;
             foreach ($aModuleClasses as $sModuleClass) {
                 $sModuleClass = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $sModuleClass);
                 if ($blSkipDisabledModules && in_array($sModuleClass, $aDisabledModules)) {
