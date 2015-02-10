@@ -13,7 +13,7 @@ Requirements
 You could see benefits in this module when you:
  * are a PHP developer who invents modules for OXID 
  * suffer from not having automatic code completion in your IDE
- * have installed a working OXID eShop installation version 4.7.3 or higher
+ * have installed a working OXID eShop installation version 4.9.x/5.2.x or higher
  
 Installation
 ------------
@@ -25,10 +25,10 @@ Installation
 
 Compatibility
 -------------
-This module was created and tested with OXID eShop CE 4.7.3. Based on the functionality it provides, chances are high that it will also work smoothly in PE or EE - but it is not guaranteed. 
+This module was created and tested with OXID eShop CE 4.9. Based on the functionality it provides, chances are high that it will also work smoothly in PE or EE - but it is not guaranteed. 
 If you test it I'd love to get your feedback.
 
 Example
 ------- 
 This screenshot illustrates the effect before/after creating the parent classes.
-![Before / After](modules/dsb_ide_helper/thumb.png)
+![Before / After](modules/dsb/dsb_ide_helper/out/thumb.png)

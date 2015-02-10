@@ -2,7 +2,7 @@
 /**
  * Metadata version
  */
-$sMetadataVersion = '1.1';
+$sMetadataVersion = '1.2';
 
 /**
  * Module information
@@ -29,15 +29,15 @@ $aModule = array(
                 . 'jederzeit aktualisiert werden.',
     ),
     'lang'        => 'en',
-    'version'     => '1.0.0',
+    'version'     => '1.1.0',
     'author'      => 'Daniel Schlichtholz',
     'email'       => 'admin@mysqldumper.de',
-    'thumbnail'   => 'thumb.png',
+    'thumbnail'   => 'out/thumb.png',
     'extend'      => array(),
     'files'       => array(
-        'dsb_ide_helper' => 'dsb_ide_helper/controllers/admin/dsb_ide_helper.php',
+        'dsb_ide_helper' => 'dsb/dsb_ide_helper/controllers/admin/dsb_ide_helper.php',
     ),
     'templates'   => array(
-        'dsb_ide_helper.tpl' => 'dsb_ide_helper/out/admin/tpl/dsb_ide_helper.tpl',
+        'dsb_ide_helper.tpl' => 'dsb/dsb_ide_helper/views/admin/tpl/dsb_ide_helper.tpl',
     ),
 );
