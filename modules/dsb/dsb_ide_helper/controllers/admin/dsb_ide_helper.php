@@ -96,9 +96,10 @@ class dsb_ide_helper extends oxAdminView
          * @var oxModule $oModule
          */
         $oModuleList           = oxNew('oxmodulelist');
+        $oViewConfig           = oxNew('oxviewconfig');
         $aModules              = $oModuleList->getModules();
         $aDisabledModules      = $oModuleList->getDisabledModules();
-        $moduleBasePath        = $this->getConfig()->getModulesDir(true);
+        $moduleBasePath        = $oViewConfig->getModulePath('dsb_ide_helper');
         $this->_aModuleClasses = array();
         foreach ($aModules as $sClassName => $sModuleClasses) {
         	$aModuleClasses = explode('&', $sModuleClasses);
@@ -112,7 +113,7 @@ class dsb_ide_helper extends oxAdminView
                 $aDirectories     = explode(DIRECTORY_SEPARATOR, $sModuleClass);
                 $sModuleClassName = $aDirectories[count($aDirectories) - 1] . '_parent';
                 unset($aDirectories[count($aDirectories) - 1]);
-                $sFilePath               = $moduleBasePath . implode(DIRECTORY_SEPARATOR, $aDirectories) . DIRECTORY_SEPARATOR;
+                $sFilePath               = $moduleBasePath . DIRECTORY_SEPARATOR . 'generated' . DIRECTORY_SEPARATOR;
                 $this->_aModuleClasses[] = array(
                     'fileName' => $sFilePath . $sModuleClassName . '.php',
                     'content'  => $this->getFileContent($sModuleClassName, $sParentClassName),
